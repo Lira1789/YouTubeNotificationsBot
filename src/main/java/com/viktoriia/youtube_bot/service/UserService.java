@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.NotFoundException;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -53,7 +52,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public boolean isUserOnSearchMode(long chatId) {
         User user = userRepository.findById(chatId).orElseThrow(NotFoundException::new);
         boolean search = user.isSearch();

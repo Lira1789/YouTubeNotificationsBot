@@ -1,0 +1,55 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+}
+
+group = 'com.viktoriia'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //region Spring
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    compile'org.springframework.boot:spring-boot-configuration-processor:2.2.1.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.1.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'org.postgresql:postgresql'
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    //endregion
+
+    //region Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    //endregion
+
+    compile group: 'org.telegram', name: 'telegrambots-spring-boot-starter', version: '4.9.2'
+    // https://mvnrepository.com/artifact/com.rometools/rome
+    compile group: 'com.rometools', name: 'rome', version: '1.15.0'
+    compile group: 'com.vdurmont', name: 'emoji-java', version: '5.1.1'
+
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        exclude group: "com.vaadin.external.google", module:"android-json"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

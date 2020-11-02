@@ -5,3 +5,6 @@ You can subscribe to YouTube channels and receive new videos immediately after p
 
 Bot uses YouTube API for search and https://pubsubhubbub.appspot.com/subscribe service for notifications.
 
+The bot is available in telegram by name @YouTubeNotification_xbot, but not deployed yet
+
+![screenshot ](https://ibb.co/y5y5SG3)

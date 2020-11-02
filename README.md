@@ -7,4 +7,4 @@ Bot uses YouTube API for search and https://pubsubhubbub.appspot.com/subscribe s
 
 The bot is available in telegram by name @YouTubeNotification_xbot, but not deployed yet
 
-![screenshot ](https://ibb.co/y5y5SG3)
+![screenshot ](https://cdn1.radikalno.ru/uploads/2020/11/2/f01b5ddcb7e40bdc7cb6d4e8e3bbf707-full.jpg)

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static com.viktoriia.youtube_bot.common.Messages.SUBS_NOT_FOUND_MESSAGE;
 
@@ -25,7 +25,7 @@ public class SubscriptionsMessageHandler implements MessageHandler {
     @Override
     public List<SendMessage> getMessages(Message message) {
         Long chatId = message.getChatId();
-        Set<Channel> channels = userService.getUser(chatId).getChannels();
+        List<Channel> channels = new ArrayList<>(userService.getUser(chatId).getChannels());
         return messageService.createMessages(channels, SubsMod.UNSUBSCRIBE.name(), chatId, SUBS_NOT_FOUND_MESSAGE);
     }
 

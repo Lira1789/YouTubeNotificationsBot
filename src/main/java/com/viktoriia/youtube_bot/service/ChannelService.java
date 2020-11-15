@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.ws.rs.NotFoundException;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +16,7 @@ public class ChannelService {
     private final ChannelRepository channelRepository;
 
     @Transactional
-    public void createChannels(Set<Channel> channels) {
+    public void createChannels(List<Channel> channels) {
         channels.forEach(channel -> {
             if (!channelRepository.existsByStringId(channel.getStringId())) {
                 channelRepository.save(channel);
@@ -25,8 +25,20 @@ public class ChannelService {
     }
 
     @Transactional
-    public void deleteChannelsWithNoUsers() {
+    public int deleteChannelsWithNoUsers() {
         List<Channel> channels = channelRepository.findByUsersIsNull();
+        int channelsSize = channels.size();
         channels.forEach(channelRepository::delete);
+        return channelsSize;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Channel> getAllChannelsWithUsers() {
+        return channelRepository.findByUsersNotNull();
+    }
+
+    @Transactional(readOnly = true)
+    public Channel getChannelByStringId(String stringId) {
+        return channelRepository.findByStringId(stringId).orElseThrow(NotFoundException::new);
     }
 }

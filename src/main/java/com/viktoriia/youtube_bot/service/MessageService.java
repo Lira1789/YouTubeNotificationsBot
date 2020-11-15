@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.viktoriia.youtube_bot.common.Messages.EMPTY_MESSAGE;
 import static com.viktoriia.youtube_bot.common.Messages.FIND_MESSAGE;
@@ -35,7 +34,7 @@ public class MessageService {
         return Collections.singletonList(new SendMessage(chatId, message));
     }
 
-    public List<SendMessage> createMessages(Set<Channel> channels, String mode, long chatId, String response) {
+    public List<SendMessage> createMessages(List<Channel> channels, String mode, long chatId, String response) {
         String message = messageMap.get(mode);
         List<SendMessage> sendMessages = new ArrayList<>();
         if (channels == null || channels.size() < 1) {
@@ -50,7 +49,7 @@ public class MessageService {
         return sendMessages;
     }
 
-    private InlineKeyboardMarkup getKeyBoard(String channelId, String buttonText, String callbackDataMode) {
+    public InlineKeyboardMarkup getKeyBoard(String channelId, String buttonText, String callbackDataMode) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton button = new InlineKeyboardButton().setText(buttonText);
         button.setCallbackData(callbackDataMode + "/" + channelId);

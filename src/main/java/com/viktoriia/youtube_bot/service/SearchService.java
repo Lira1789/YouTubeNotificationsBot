@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * searches channels by name with YouTube API
@@ -25,16 +25,16 @@ public class SearchService {
     @Value("${search.url}")
     private String searchUrl;
 
-    public Set<Channel> searchChannel(String stringChannelId) {
+    public List<Channel> searchChannel(String stringChannelId) {
         ResponseEntity<SearchResult> forEntity = restTemplate.getForEntity(searchUrl, SearchResult.class, stringChannelId);
         Optional<SearchResult> optionalSearchResult = Optional.ofNullable(forEntity.getBody());
-        Set<Channel> channels = getChannelsFromSearchResult(optionalSearchResult.orElseThrow(EmptySearchResult::new));
+        List<Channel> channels = getChannelsFromSearchResult(optionalSearchResult.orElseThrow(EmptySearchResult::new));
         channelService.createChannels(channels);
         return channels;
     }
 
-    private Set<Channel> getChannelsFromSearchResult(SearchResult searchResult) {
-        Set<Channel> channels = new HashSet<>();
+    private List<Channel> getChannelsFromSearchResult(SearchResult searchResult) {
+        List<Channel> channels = new ArrayList<>();
         searchResult.getItems().forEach(item -> {
             if (item.isChannel()) {
                 channels.add(Channel.builder()

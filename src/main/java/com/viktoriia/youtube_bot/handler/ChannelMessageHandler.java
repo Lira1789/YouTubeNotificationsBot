@@ -12,7 +12,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static com.viktoriia.youtube_bot.common.Messages.CHANNELS_NOT_FOUND_MESSAGE;
 import static com.viktoriia.youtube_bot.common.Messages.WRONG_COMMAND_MESSAGE;
@@ -31,7 +30,7 @@ public class ChannelMessageHandler implements MessageHandler {
             return Collections.singletonList(new SendMessage(message.getChatId(), WRONG_COMMAND_MESSAGE));
         }
 
-        Set<Channel> channels = searchService.searchChannel(message.getText());
+        List<Channel> channels = searchService.searchChannel(message.getText());
         return messageService.createMessages(channels, SubsMod.SUBSCRIBE.name(), message.getChatId(), CHANNELS_NOT_FOUND_MESSAGE);
     }
 

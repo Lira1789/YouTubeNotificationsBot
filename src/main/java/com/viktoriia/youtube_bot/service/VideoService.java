@@ -26,8 +26,10 @@ public class VideoService {
     }
 
     @Transactional
-    public void deleteOldVideos() {
+    public int deleteOldVideos() {
         List<Video> oldVideos = videoRepository.findByDateBefore(LocalDateTime.now().minusDays(1));
+        int oldVideosCount = oldVideos.size();
         oldVideos.forEach(videoRepository::delete);
+        return oldVideosCount;
     }
 }

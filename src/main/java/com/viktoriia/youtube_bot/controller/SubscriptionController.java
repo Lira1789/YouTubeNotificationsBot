@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -78,13 +79,9 @@ public class SubscriptionController {
         }
         videoService.createVideo(video);
         Set<User> usersForNotifications = userService.getAllUsersForNotifications(video.getChannelStringId());
-        for (User user : usersForNotifications) {
-            try {
-                youTubeBot.execute(new SendMessage(user.getChatId(), video.toString()));
-            } catch (TelegramApiException e) {
-                log.error(e.getMessage() + Arrays.toString(e.getStackTrace()));
-            }
-        }
+        List<SendMessage> messages = new ArrayList<>();
+        usersForNotifications.forEach(user -> messages.add(new SendMessage(user.getChatId(), video.toString())));
+        youTubeBot.sendMessages(messages);
     }
 
     private Video getVideoFromRequest(HttpServletRequest request) throws IOException, FeedException {

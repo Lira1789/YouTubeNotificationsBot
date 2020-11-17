@@ -27,25 +27,26 @@ public class YouTubeBot extends TelegramWebhookBot {
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         if (update.hasCallbackQuery()) {
-            try {
-                execute(youTubeBotFacade.handleCallBackQuery(update));
-                execute(youTubeBotFacade.changeButtonText(update.getCallbackQuery()));
-            } catch (TelegramApiException e) {
-                log.error(e.getMessage() + Arrays.toString(e.getStackTrace()));
-            }
+            executeAction(youTubeBotFacade.handleCallBackQuery(update));
+            executeAction((youTubeBotFacade.changeButtonText(update.getCallbackQuery())));
         }
 
         if (update.getMessage() != null && update.getMessage().hasText()) {
-            List<SendMessage> sendMessages = youTubeBotFacade.handleMessage(update);
-            for (SendMessage message : sendMessages) {
-                try {
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    log.error(e.getMessage() + Arrays.toString(e.getStackTrace()));
-                }
-            }
+            sendMessages(youTubeBotFacade.handleMessage(update));
         }
         return null;
+    }
+
+    public void sendMessages(List<SendMessage> messages) {
+        messages.forEach(this::executeAction);
+    }
+
+    private void executeAction(BotApiMethod<?> method) {
+        try {
+            execute(method);
+        } catch (TelegramApiException e) {
+            log.error(e.getMessage() + Arrays.toString(e.getStackTrace()));
+        }
     }
 
     @Override

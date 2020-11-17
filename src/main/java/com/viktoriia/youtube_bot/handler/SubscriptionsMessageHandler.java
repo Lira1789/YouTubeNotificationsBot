@@ -26,7 +26,10 @@ public class SubscriptionsMessageHandler implements MessageHandler {
     public List<SendMessage> getMessages(Message message) {
         Long chatId = message.getChatId();
         List<Channel> channels = new ArrayList<>(userService.getUser(chatId).getChannels());
-        return messageService.createMessages(channels, SubsMod.UNSUBSCRIBE.name(), chatId, SUBS_NOT_FOUND_MESSAGE);
+        if (channels.isEmpty()) {
+            return messageService.createSingleMessageList(SUBS_NOT_FOUND_MESSAGE, chatId);
+        }
+        return messageService.createChannelMessagesList(channels, SubsMod.UNSUBSCRIBE.name(), chatId);
     }
 
     @Override

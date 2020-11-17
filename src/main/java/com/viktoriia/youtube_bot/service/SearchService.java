@@ -2,6 +2,7 @@ package com.viktoriia.youtube_bot.service;
 
 import com.viktoriia.youtube_bot.exceptions.EmptySearchResult;
 import com.viktoriia.youtube_bot.model.Channel;
+import com.viktoriia.youtube_bot.model.pojo.Item;
 import com.viktoriia.youtube_bot.model.pojo.SearchResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * searches channels by name with YouTube API
@@ -34,16 +36,10 @@ public class SearchService {
     }
 
     private List<Channel> getChannelsFromSearchResult(SearchResult searchResult) {
-        List<Channel> channels = new ArrayList<>();
-        searchResult.getItems().forEach(item -> {
-            if (item.isChannel()) {
-                channels.add(Channel.builder()
-                        .title(item.getSnippet().getTitle())
-                        .stringId(item.getSnippet().getChannelId())
-                        .description(item.getSnippet().getDescription())
-                        .imageUrl(item.getSnippet().getThumbnails().getHigh().getUrl()).build());
-            }
-        });
-        return channels;
+        return searchResult.getItems()
+                .stream()
+                .filter(Item::isChannel)
+                .map(Item::getChannelFromItem)
+                .collect(Collectors.toList());
     }
 }

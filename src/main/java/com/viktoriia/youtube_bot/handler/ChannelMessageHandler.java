@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.viktoriia.youtube_bot.common.Messages.CHANNELS_NOT_FOUND_MESSAGE;
@@ -27,11 +26,15 @@ public class ChannelMessageHandler implements MessageHandler {
     @Override
     public List<SendMessage> getMessages(Message message) {
         if (!userService.isUserOnSearchMode(message.getChatId())) {
-            return Collections.singletonList(new SendMessage(message.getChatId(), WRONG_COMMAND_MESSAGE));
+            return messageService.createSingleMessageList(WRONG_COMMAND_MESSAGE, message.getChatId());
         }
 
         List<Channel> channels = searchService.searchChannel(message.getText());
-        return messageService.createMessages(channels, SubsMod.SUBSCRIBE.name(), message.getChatId(), CHANNELS_NOT_FOUND_MESSAGE);
+
+        if (channels.isEmpty()) {
+            return messageService.createSingleMessageList(CHANNELS_NOT_FOUND_MESSAGE, message.getChatId());
+        }
+        return messageService.createChannelMessagesList(channels, SubsMod.SUBSCRIBE.name(), message.getChatId());
     }
 
     @Override

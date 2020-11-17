@@ -19,7 +19,7 @@ public class HelpMessageHandler implements MessageHandler {
 
     @Override
     public List<SendMessage> getMessages(Message message) {
-        return messageService.createMessage(HELP_MESSAGE, message.getChatId());
+        return messageService.createSingleMessageList(HELP_MESSAGE, message.getChatId());
     }
 
     @Override

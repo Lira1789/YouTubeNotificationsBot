@@ -14,7 +14,6 @@ public class SchedulingService {
 
     private final VideoService videoService;
     private final ChannelService channelService;
-    private final SubscriptionService subscriptionService;
 
     @Scheduled(cron = "${scheduling.deletevideotime}")
     public void deleteOldVideos() {

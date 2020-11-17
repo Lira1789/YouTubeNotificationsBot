@@ -26,7 +26,7 @@ public class StartMessageHandler implements MessageHandler {
     public List<SendMessage> getMessages(Message message) {
         User user = userService.createUser(message.getFrom().getUserName(), message.getChatId());
         log.info(String.format("New user registered: %s", user.toString()));
-        return messageService.createMessage(START_MESSAGE, message.getChatId());
+        return messageService.createSingleMessageList(START_MESSAGE, message.getChatId());
     }
 
     @Override

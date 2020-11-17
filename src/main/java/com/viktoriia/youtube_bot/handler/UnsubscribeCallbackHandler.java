@@ -23,7 +23,7 @@ public class UnsubscribeCallbackHandler implements CallbackHandler {
     @Override
     public AnswerCallbackQuery handleCallbackQuery(CallbackQuery callbackQuery, long chatId, String channelId) {
         userService.deleteChannelFromUser(chatId, channelId);
-        if (userService.getAllUsersForNotifications(channelId).size() < 1) {
+        if (userService.getAllUsersForNotifications(channelId).isEmpty()) {
             subscriptionService.subscriptionAction(channelId, getSubsMod().toLowerCase());
         }
         return sendAnswerCallbackQuery(UNSUBS_MESSAGE, false, callbackQuery);

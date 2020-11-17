@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.viktoriia.youtube_bot.common.Messages.EMPTY_MESSAGE;
 import static com.viktoriia.youtube_bot.common.Messages.FIND_MESSAGE;
@@ -30,23 +31,23 @@ public class MessageService {
         messageMap.put(SubsMod.UNSUBSCRIBE.name(), EMPTY_MESSAGE);
     }
 
-    public List<SendMessage> createMessage(String message, long chatId) {
-        return Collections.singletonList(new SendMessage(chatId, message));
+    public List<SendMessage> createSingleMessageList(String message, long chatId) {
+        return Collections.singletonList(createMessage(message, chatId));
     }
 
-    public List<SendMessage> createMessages(List<Channel> channels, String mode, long chatId, String response) {
+    public List<SendMessage> createChannelMessagesList(List<Channel> channels, String mode, long chatId) {
         String message = messageMap.get(mode);
-        List<SendMessage> sendMessages = new ArrayList<>();
-        if (channels == null || channels.size() < 1) {
-            sendMessages.add(new SendMessage(chatId, response));
-        } else {
-            channels.forEach(channel -> {
-                SendMessage sendMessage = new SendMessage(chatId, message + channel.toString()).enableMarkdown(true);
-                sendMessage.setReplyMarkup(getKeyBoard(channel.getStringId(), mode, mode));
-                sendMessages.add(sendMessage);
-            });
-        }
-        return sendMessages;
+        return channels.stream()
+                .map(channel -> createMessageWithKeyBoard(message + channel.toString(), channel.getStringId(), mode, chatId))
+                .collect(Collectors.toList());
+    }
+
+    public SendMessage createMessage(String message, long chatId) {
+        return new SendMessage(chatId, message);
+    }
+
+    public SendMessage createMessageWithKeyBoard(String message, String channelId, String mode, long chatId) {
+        return createMessage(message, chatId).enableMarkdown(true).setReplyMarkup(getKeyBoard(channelId, mode, mode));
     }
 
     public InlineKeyboardMarkup getKeyBoard(String channelId, String buttonText, String callbackDataMode) {

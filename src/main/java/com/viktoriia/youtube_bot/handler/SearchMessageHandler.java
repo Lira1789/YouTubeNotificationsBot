@@ -22,7 +22,7 @@ public class SearchMessageHandler implements MessageHandler {
     @Override
     public List<SendMessage> getMessages(Message message) {
         userService.switchUserToSearchMode(message.getChatId());
-        return messageService.createMessage(SEARCH_MESSAGE, message.getChatId());
+        return messageService.createSingleMessageList(SEARCH_MESSAGE, message.getChatId());
     }
 
     @Override

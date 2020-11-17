@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.viktoriia.youtube_bot.model.Channel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,5 +38,13 @@ public class Item {
 
     public boolean isChannel() {
         return "youtube#channel".equals(getId().getKind());
+    }
+
+    public Channel getChannelFromItem() {
+        return Channel.builder()
+                .title(snippet.getTitle())
+                .stringId(snippet.getChannelId())
+                .description(snippet.getDescription())
+                .imageUrl(snippet.getThumbnails().getHigh().getUrl()).build();
     }
 }

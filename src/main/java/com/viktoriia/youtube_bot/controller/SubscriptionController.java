@@ -9,6 +9,7 @@ import com.viktoriia.youtube_bot.bot.YouTubeBot;
 import com.viktoriia.youtube_bot.exceptions.EmptySyndEntryException;
 import com.viktoriia.youtube_bot.model.User;
 import com.viktoriia.youtube_bot.model.Video;
+import com.viktoriia.youtube_bot.service.MessageService;
 import com.viktoriia.youtube_bot.service.UserService;
 import com.viktoriia.youtube_bot.service.VideoService;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +24,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.viktoriia.youtube_bot.common.Constants.HUB_CHALLENGE;
 import static com.viktoriia.youtube_bot.common.Constants.HUB_TOPIC;
@@ -47,6 +45,7 @@ public class SubscriptionController {
     private final YouTubeBot youTubeBot;
     private final UserService userService;
     private final VideoService videoService;
+    private final MessageService messageService;
 
     /**
      * Processes a request from https://pubsubhubbub.appspot.com/subscribe
@@ -59,7 +58,7 @@ public class SubscriptionController {
     public ResponseEntity<String> verifySubscription(@RequestParam(value = HUB_CHALLENGE) String challenge,
                                                      @RequestParam(value = HUB_TOPIC) String channel) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(new MediaType("text", "plain", StandardCharsets.UTF_8));
+        httpHeaders.setContentType(MediaType.TEXT_PLAIN);
         log.info(String.format("%s - subscription verified", channel));
         return new ResponseEntity<>(challenge, httpHeaders, HttpStatus.OK);
     }
@@ -79,9 +78,10 @@ public class SubscriptionController {
         }
         videoService.createVideo(video);
         Set<User> usersForNotifications = userService.getAllUsersForNotifications(video.getChannelStringId());
-        List<SendMessage> messages = new ArrayList<>();
-        usersForNotifications.forEach(user -> messages.add(new SendMessage(user.getChatId(), video.toString())));
-        youTubeBot.sendMessages(messages);
+        List<SendMessage> sendMessages = usersForNotifications.stream()
+                .map(user -> messageService.createMessage(video.toString(), user.getChatId()))
+                .collect(Collectors.toList());
+        youTubeBot.sendMessages(sendMessages);
     }
 
     private Video getVideoFromRequest(HttpServletRequest request) throws IOException, FeedException {

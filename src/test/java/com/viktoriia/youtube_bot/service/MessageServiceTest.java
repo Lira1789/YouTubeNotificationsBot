@@ -24,31 +24,15 @@ public class MessageServiceTest {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         messageService = new MessageService();
         channels = getChannels();
     }
 
     @Test
-    public void createMessage() {
+    public void createSingleMessageList() {
         List<SendMessage> expected = Collections.singletonList(new SendMessage(1L, "Hello"));
-        List<SendMessage> actual = messageService.createMessage("Hello", 1L);
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void createMessages_whenChannelsIsEmpty_thenWritesOnlyMessage() {
-        List<SendMessage> expected = Collections.singletonList(new SendMessage(1L, "No channels"));
-        List<SendMessage> actual =
-                messageService.createMessages(Collections.emptyList(), SubsMod.SUBSCRIBE.name(), 1L, "No channels");
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void createMessages_whenChannelsIsNull_thenWritesOnlyMessage() {
-        List<SendMessage> expected = Collections.singletonList(new SendMessage(1L, "No channels"));
-        List<SendMessage> actual =
-                messageService.createMessages(null, SubsMod.SUBSCRIBE.name(), 1L, "No channels");
+        List<SendMessage> actual = messageService.createSingleMessageList("Hello", 1L);
         assertEquals(expected, actual);
     }
 
@@ -60,7 +44,7 @@ public class MessageServiceTest {
                 new SendMessage(1L, FIND_MESSAGE + channels.get(1)).enableMarkdown(true)
                         .setReplyMarkup(messageService.getKeyBoard(channels.get(1).getStringId(), SubsMod.SUBSCRIBE.name(), SubsMod.SUBSCRIBE.name())));
         List<SendMessage> actual =
-                messageService.createMessages(channels, SubsMod.SUBSCRIBE.name(), 1L, "No channels");
+                messageService.createChannelMessagesList(channels, SubsMod.SUBSCRIBE.name(), 1L);
         assertEquals(expected, actual);
     }
 
@@ -72,7 +56,7 @@ public class MessageServiceTest {
                 new SendMessage(1L, EMPTY_MESSAGE + channels.get(1)).enableMarkdown(true)
                         .setReplyMarkup(messageService.getKeyBoard(channels.get(1).getStringId(), SubsMod.UNSUBSCRIBE.name(), SubsMod.UNSUBSCRIBE.name())));
         List<SendMessage> actual =
-                messageService.createMessages(channels, SubsMod.UNSUBSCRIBE.name(), 1L, "No channels");
+                messageService.createChannelMessagesList(channels, SubsMod.UNSUBSCRIBE.name(), 1L);
         assertEquals(expected, actual);
     }
 

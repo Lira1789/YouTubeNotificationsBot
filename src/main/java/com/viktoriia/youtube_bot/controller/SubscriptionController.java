@@ -73,15 +73,14 @@ public class SubscriptionController {
     public void sendNotification(HttpServletRequest request) throws IOException, FeedException {
         Video video = getVideoFromRequest(request);
         log.info(String.format("Notification: video %s", video.toString()));
-        if (videoService.isVideoExist(video)) {
-            return;
+        if (!videoService.isVideoExist(video)) {
+            videoService.createVideo(video);
+            Set<User> usersForNotifications = userService.getAllUsersForNotifications(video.getChannelStringId());
+            List<SendMessage> sendMessages = usersForNotifications.stream()
+                    .map(user -> messageService.createMessage(video.toString(), user.getChatId()))
+                    .collect(Collectors.toList());
+            youTubeBot.sendMessages(sendMessages);
         }
-        videoService.createVideo(video);
-        Set<User> usersForNotifications = userService.getAllUsersForNotifications(video.getChannelStringId());
-        List<SendMessage> sendMessages = usersForNotifications.stream()
-                .map(user -> messageService.createMessage(video.toString(), user.getChatId()))
-                .collect(Collectors.toList());
-        youTubeBot.sendMessages(sendMessages);
     }
 
     private Video getVideoFromRequest(HttpServletRequest request) throws IOException, FeedException {

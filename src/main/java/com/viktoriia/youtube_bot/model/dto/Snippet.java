@@ -1,4 +1,4 @@
-package com.viktoriia.youtube_bot.model.pojo;
+package com.viktoriia.youtube_bot.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

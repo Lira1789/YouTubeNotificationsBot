@@ -2,15 +2,14 @@ package com.viktoriia.youtube_bot.service;
 
 import com.viktoriia.youtube_bot.exceptions.EmptySearchResult;
 import com.viktoriia.youtube_bot.model.Channel;
-import com.viktoriia.youtube_bot.model.pojo.Item;
-import com.viktoriia.youtube_bot.model.pojo.SearchResult;
+import com.viktoriia.youtube_bot.model.dto.Item;
+import com.viktoriia.youtube_bot.model.dto.SearchResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

@@ -1,14 +1,14 @@
-package com.viktoriia.youtube_bot.model.pojo;
+package com.viktoriia.youtube_bot.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.viktoriia.youtube_bot.model.Channel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,33 +18,28 @@ import java.util.Map;
 @JsonPropertyOrder({
         "kind",
         "etag",
-        "id",
-        "snippet"
+        "nextPageToken",
+        "regionCode",
+        "pageInfo",
+        "items"
 })
 @Getter
 @Setter
-public class Item {
+public class SearchResult {
 
     @JsonProperty("kind")
     private String kind;
     @JsonProperty("etag")
     private String etag;
-    @JsonProperty("id")
-    private Id id;
-    @JsonProperty("snippet")
-    private Snippet snippet;
+    @JsonProperty("nextPageToken")
+    private String nextPageToken;
+    @JsonProperty("regionCode")
+    private String regionCode;
+    @JsonProperty("pageInfo")
+    private PageInfo pageInfo;
+    @JsonProperty("items")
+    private List<Item> items = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 
-    public boolean isChannel() {
-        return "youtube#channel".equals(getId().getKind());
-    }
-
-    public Channel getChannelFromItem() {
-        return Channel.builder()
-                .title(snippet.getTitle())
-                .stringId(snippet.getChannelId())
-                .description(snippet.getDescription())
-                .imageUrl(snippet.getThumbnails().getHigh().getUrl()).build();
-    }
 }

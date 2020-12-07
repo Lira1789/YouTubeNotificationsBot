@@ -1,4 +1,4 @@
-package com.viktoriia.youtube_bot.model.pojo;
+package com.viktoriia.youtube_bot.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,17 +15,20 @@ import java.util.Map;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "totalResults",
-        "resultsPerPage"
+        "url",
+        "width",
+        "height"
 })
 @Getter
 @Setter
-public class PageInfo {
+public class High {
 
-    @JsonProperty("totalResults")
-    private Integer totalResults;
-    @JsonProperty("resultsPerPage")
-    private Integer resultsPerPage;
+    @JsonProperty("url")
+    private String url;
+    @JsonProperty("width")
+    private Integer width;
+    @JsonProperty("height")
+    private Integer height;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 

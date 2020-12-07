@@ -1,4 +1,4 @@
-package com.viktoriia.youtube_bot.model.pojo;
+package com.viktoriia.youtube_bot.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -21,7 +21,7 @@ import java.util.Map;
 })
 @Getter
 @Setter
-public class High {
+public class Default {
 
     @JsonProperty("url")
     private String url;

@@ -26,5 +26,4 @@ public class SchedulingService {
         int channelsWithNoUsers = channelService.deleteChannelsWithNoUsers();
         log.info(String.format("%d channels without users were deleted", channelsWithNoUsers));
     }
-
 }

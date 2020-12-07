@@ -1,4 +1,4 @@
-package com.viktoriia.youtube_bot.model.pojo;
+package com.viktoriia.youtube_bot.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,29 +15,17 @@ import java.util.Map;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "kind",
-        "etag",
-        "nextPageToken",
-        "regionCode",
-        "pageInfo",
-        "items"
+        "totalResults",
+        "resultsPerPage"
 })
 @Getter
 @Setter
-public class SearchResult {
+public class PageInfo {
 
-    @JsonProperty("kind")
-    private String kind;
-    @JsonProperty("etag")
-    private String etag;
-    @JsonProperty("nextPageToken")
-    private String nextPageToken;
-    @JsonProperty("regionCode")
-    private String regionCode;
-    @JsonProperty("pageInfo")
-    private PageInfo pageInfo;
-    @JsonProperty("items")
-    private List<Item> items = null;
+    @JsonProperty("totalResults")
+    private Integer totalResults;
+    @JsonProperty("resultsPerPage")
+    private Integer resultsPerPage;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 

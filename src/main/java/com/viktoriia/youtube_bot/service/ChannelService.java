@@ -1,12 +1,12 @@
 package com.viktoriia.youtube_bot.service;
 
+import com.viktoriia.youtube_bot.exceptions.NotFoundException;
 import com.viktoriia.youtube_bot.model.Channel;
 import com.viktoriia.youtube_bot.repository.ChannelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.ws.rs.NotFoundException;
 import java.util.List;
 
 @Service
@@ -39,6 +39,6 @@ public class ChannelService {
 
     @Transactional(readOnly = true)
     public Channel getChannelByStringId(String stringId) {
-        return channelRepository.findByStringId(stringId).orElseThrow(NotFoundException::new);
+        return channelRepository.findByStringId(stringId).orElseThrow(() -> new NotFoundException(Channel.class));
     }
 }

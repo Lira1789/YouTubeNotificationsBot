@@ -29,6 +29,8 @@ public class ChannelMessageHandler implements MessageHandler {
             return messageService.createSingleMessageList(WRONG_COMMAND_MESSAGE, message.getChatId());
         }
 
+        userService.switchUserFromSearchMode(message.getChatId());
+
         List<Channel> channels = searchService.searchChannel(message.getText());
 
         if (channels.isEmpty()) {
